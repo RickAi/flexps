@@ -1,12 +1,12 @@
 #include "gflags/gflags.h"
 #include "glog/logging.h"
 
-#include <gperftools/profiler.h>
 #include <algorithm>
 #include <chrono>
 #include <cstdlib>
 #include <ctime>
 #include <thread>
+#include <cmath>
 
 #include "boost/utility/string_ref.hpp"
 #include "base/serialization.hpp"
