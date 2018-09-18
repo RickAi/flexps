@@ -4,6 +4,8 @@
 
 FlexPS is a minimum Parameter-Server based system, supporting efficient worker-server interaction using various consistency model (BSP/SSP/ASP). 
 
+![](flexps_class_diagram.jpg)
+
 The introductory paper of FlexPS has been published in PVLDB'18 ([paper](http://www.vldb.org/pvldb/vol11/p566-huang.pdf)). The team for this work consists of Yuzhen Huang, Tatiana Jin, Yidi Wu, Zhenkun Cai, Xiao Yan, Fan Yang, Jinfeng Li, Yuying Guo, James Cheng. We also would like to acknowledge the contributions of Zhanhao Liu, Shuo Tu, Ruoyu Wu to this work.
 
 For paper version, pleace check out [flexps-paper-version](https://github.com/Yuzhen11/flexps-paper-version) which is the research prototype and is not maintained anymore.

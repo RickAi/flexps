@@ -9,8 +9,8 @@
 #include <algorithm>
 #include <numeric>
 
-DEFINE_int32(my_id, 1, "The process id of this program");
-DEFINE_string(config_file, "../machinefiles/5localnode", "The config file path");
+DEFINE_int32(my_id, -1, "The process id of this program");
+DEFINE_string(config_file, "", "The config file path");
 
 namespace flexps {
 
