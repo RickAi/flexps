@@ -59,7 +59,7 @@ def kill_nodes(prog_name, hostfile_path):
 def parse_file(progfile, hostfile):
   script_path = os.path.realpath(__file__)
   proj_dir = dirname(dirname(script_path))
-  print "flexps porj_dir:", proj_dir
+  print "porj_dir:", proj_dir
   hostfile_path = join(proj_dir, hostfile)
   prog_path = join(proj_dir, progfile)
   print "hostfile_path:%s, prog_path:%s" % (hostfile_path, prog_path)
@@ -68,7 +68,7 @@ def parse_file(progfile, hostfile):
 
 def launch_util(progfile, hostfile, env_params, params, argv):
   prog_path, hostfile_path = parse_file(progfile, hostfile)  
-  if len(argv) == 1:
+  if len(argv) == 1 or (len(argv) == 2 and argv[1] == "local"):
     params["config_file"] = hostfile_path
     launch_nodes(prog_path, hostfile_path, env_params, params)
   elif len(argv) == 2 and argv[1] == "kill":

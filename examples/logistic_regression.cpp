@@ -16,22 +16,22 @@
 #include "driver/engine.hpp"
 #include "worker/kv_client_table.hpp"
 
-DEFINE_int32(my_id, -1, "The process id of this program");
-DEFINE_string(config_file, "", "The config file path");
-DEFINE_string(hdfs_namenode, "", "The hdfs namenode hostname");
-DEFINE_string(input, "", "The hdfs input url");
-DEFINE_int32(hdfs_namenode_port, -1, "The hdfs namenode port");
+DEFINE_int32(my_id, 0, "The process id of this program");
+DEFINE_string(config_file, "/Users/aiyongbiao/Desktop/projects/flexps/machinefiles/local", "The config file path");
+DEFINE_string(hdfs_namenode, "localhost", "The hdfs namenode hostname");
+DEFINE_string(input, "hdfs:///datasets/classification/a1a", "The hdfs input url");
+DEFINE_int32(hdfs_namenode_port, 9000, "The hdfs namenode port");
 
-DEFINE_string(kModelType, "", "ASP/SSP/BSP/SparseSSP");
-DEFINE_string(kStorageType, "", "Map/Vector");
-DEFINE_int32(num_dims, 0, "number of dimensions");
-DEFINE_int32(batch_size, 100, "batch size of each epoch");
-DEFINE_int32(num_iters, 10, "number of iters");
+DEFINE_string(kModelType, "SSP", "ASP/SSP/BSP/SparseSSP");
+DEFINE_string(kStorageType, "Vector", "Map/Vector");
+DEFINE_int32(num_dims, 54686452, "number of dimensions");
+DEFINE_int32(batch_size, 1, "batch size of each epoch");
+DEFINE_int32(num_iters, 1000, "number of iters");
 DEFINE_int32(kStaleness, 0, "stalness");
-DEFINE_int32(kSpeculation, 1, "speculation");
-DEFINE_string(kSparseSSPRecorderType, "", "None/Map/Vector");
-DEFINE_int32(num_workers_per_node, 1, "num_workers_per_node");
-DEFINE_int32(with_injected_straggler, 0, "with injected straggler or not, 0/1");
+DEFINE_int32(kSpeculation, 5, "speculation");
+DEFINE_string(kSparseSSPRecorderType, "Vector", "None/Map/Vector");
+DEFINE_int32(num_workers_per_node, 2, "num_workers_per_node");
+DEFINE_int32(with_injected_straggler, 1, "with injected straggler or not, 0/1");
 DEFINE_int32(num_servers_per_node, 1, "num_servers_per_node");
 DEFINE_double(alpha, 0.1, "learning rate");
 
@@ -85,7 +85,7 @@ void Run() {
   config.master_host = nodes[0].hostname;
   config.hdfs_namenode = FLAGS_hdfs_namenode;
   config.hdfs_namenode_port = FLAGS_hdfs_namenode_port;
-  config.num_local_load_thread = FLAGS_num_workers_per_node;
+  config.num_local_load_thread = (uint32_t) FLAGS_num_workers_per_node;
 
   // DataObj = <feature<key, val>, label>
   using DataObj = std::pair<std::vector<std::pair<int, float>>, float>;
@@ -130,9 +130,9 @@ void Run() {
   std::vector<third_party::Range> range;
   int num_total_servers = nodes.size() * FLAGS_num_servers_per_node;
   for (int i = 0; i < num_total_servers - 1; ++ i) {
-    range.push_back({FLAGS_num_dims / num_total_servers * i, FLAGS_num_dims / num_total_servers * (i + 1)});
+    range.push_back({(uint32_t)FLAGS_num_dims / num_total_servers * i, (uint32_t)FLAGS_num_dims / num_total_servers * (i + 1)});
   }
-  range.push_back({FLAGS_num_dims / num_total_servers * (num_total_servers - 1), (uint64_t)FLAGS_num_dims});
+  range.push_back({(uint32_t)FLAGS_num_dims / num_total_servers * (num_total_servers - 1), (uint64_t)FLAGS_num_dims});
   ModelType model_type;
   if (FLAGS_kModelType == "ASP") {
     model_type = ModelType::ASP;
@@ -177,7 +177,7 @@ void Run() {
   MLTask task;
   std::vector<WorkerAlloc> worker_alloc;
   for (auto& node : nodes) {
-    worker_alloc.push_back({node.id, FLAGS_num_workers_per_node});  // each node has num_workers_per_node workers
+    worker_alloc.push_back({node.id, (uint32_t) FLAGS_num_workers_per_node});  // each node has num_workers_per_node workers
   }
   task.SetWorkerAlloc(worker_alloc);
   task.SetTables({kTableId});  // Use table 0
@@ -187,7 +187,7 @@ void Run() {
     BatchDataSampler<DataObj> batch_data_sampler(data, FLAGS_batch_size);
     //prepare all_keys
     third_party::SArray<Key> all_keys;
-    for (int i = 0; i < FLAGS_num_dims; ++ i)
+    for (uint32_t i = 0; i < FLAGS_num_dims; ++ i)
       all_keys.push_back(i);
 
     // prepare future_keys
