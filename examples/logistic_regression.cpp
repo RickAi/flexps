@@ -39,7 +39,8 @@ namespace flexps {
 
 template<typename T>
 void test_error(third_party::SArray<float>& rets_w, std::vector<T>& data_) {
-
+  LOG(INFO) << "start test error with data size=" << data_.size() << ", params size=" << rets_w.size();
+        
   int count = 0;
   float c_count = 0;  /// correct count
   for (int i = 0; i < data_.size(); ++i) {
@@ -61,6 +62,8 @@ void test_error(third_party::SArray<float>& rets_w, std::vector<T>& data_) {
     }
   }
   LOG(INFO) << " accuracy is " << std::to_string(c_count / count);
+  double accuracy = c_count / count;
+  return accuracy;
 }
 
 void Run() {
@@ -242,6 +245,11 @@ void Run() {
 
         if (i % 10 == 0)
           LOG(INFO) << "Iter: " << i << " finished on worker " << info.worker_id;
+
+        // test error
+      table->Get(all_keys, &params);
+      double accuracy = test_error<DataObj>(params, data);
+      LOG(INFO) << "Current iteration=" << i << ", accuracy=" << std::to_string(accuracy);
 
         if (FLAGS_with_injected_straggler) {
           double r = (double)rand() / RAND_MAX;
