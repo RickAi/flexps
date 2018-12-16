@@ -31,6 +31,7 @@ DEFINE_int32(kStaleness, 0, "stalness");
 DEFINE_int32(kSpeculation, 5, "speculation");
 DEFINE_string(kSparseSSPRecorderType, "Vector", "None/Map/Vector");
 DEFINE_int32(num_workers_per_node, 2, "num_workers_per_node");
+DEFINE_int32(num_loader_per_node, 2, "num_loader_per_node");
 DEFINE_int32(with_injected_straggler, 1, "with injected straggler or not, 0/1");
 DEFINE_int32(num_servers_per_node, 1, "num_servers_per_node");
 DEFINE_double(alpha, 0.1, "learning rate");
@@ -88,7 +89,7 @@ void Run() {
   config.master_host = nodes[0].hostname;
   config.hdfs_namenode = FLAGS_hdfs_namenode;
   config.hdfs_namenode_port = FLAGS_hdfs_namenode_port;
-  config.num_local_load_thread = 100;
+  config.num_local_load_thread = FLAGS_num_loader_per_node;
 
   // DataObj = <feature<key, val>, label>
   using DataObj = std::pair<std::vector<std::pair<int, float>>, float>;
