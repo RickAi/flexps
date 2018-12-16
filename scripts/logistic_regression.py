@@ -11,18 +11,18 @@ from launch_utils import launch_util
 
 local_debug = True if len(sys.argv) >= 2 and sys.argv[1] == "local" else False
 
-hostfile = "machinefiles/local" if local_debug else "machinefiles/clusternodes"
+hostfile = "machinefiles/local" if local_debug else "machinefiles/5node"
 progfile = ("cmake-build-debug" if local_debug else "debug") + "/LRExample"
 
 params = {
     "hdfs_namenode": "localhost" if local_debug else "proj10",
     "hdfs_namenode_port": 9000,
-    "input": "hdfs:///datasets/classification/a1a" if local_debug else "hdfs:///jasper/kdd12",
+    "input": "hdfs:///datasets/classification/a1a" if local_debug else "hdfs:///datasets/classification/webspam",
     "kStaleness": 0,
     "kSpeculation": 5,
     "kModelType": "SSP",  # {ASP/SSP/BSP/SparseSSP}
     "kSparseSSPRecorderType": "Vector",  # {Vector/Map}
-    "num_dims": 54686452,
+    "num_dims": 16609143,
     "batch_size": 1,
     "num_workers_per_node": 2,
     "num_servers_per_node": 1,

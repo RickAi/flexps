@@ -38,7 +38,7 @@ DEFINE_double(alpha, 0.1, "learning rate");
 namespace flexps {
 
 template<typename T>
-void test_error(third_party::SArray<float>& rets_w, std::vector<T>& data_) {
+double test_error(third_party::SArray<float>& rets_w, std::vector<T>& data_) {
   LOG(INFO) << "start test error with data size=" << data_.size() << ", params size=" << rets_w.size();
         
   int count = 0;
@@ -88,7 +88,7 @@ void Run() {
   config.master_host = nodes[0].hostname;
   config.hdfs_namenode = FLAGS_hdfs_namenode;
   config.hdfs_namenode_port = FLAGS_hdfs_namenode_port;
-  config.num_local_load_thread = FLAGS_num_workers_per_node;
+  config.num_local_load_thread = 100;
 
   // DataObj = <feature<key, val>, label>
   using DataObj = std::pair<std::vector<std::pair<int, float>>, float>;
